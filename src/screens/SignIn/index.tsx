@@ -8,27 +8,30 @@ import { useAuth } from '../../hooks/useAuth';
 import LoginBannerImg from '../../assets/images/login.svg';
 import LogoImg from '../../assets/images/logo.svg';
 
-import { 
+import {
   Container,
   Content,
-  LoginBanner, 
-  LoginInfo, 
-  Header, 
-  Partner, 
-  Description, 
+  LoginBanner,
+  LoginInfo,
+  Header,
+  Partner,
+  Description,
   SignInButton,
   SignInButtonIcon,
-  SignInButtonText 
+  SignInButtonText
 } from './styles';
 
 export function SignIn() {
   const { signIn, isLoggingIn } = useAuth();
   const theme = useTheme();
 
-  // creates a function to handle sign in
-    // try to call and wait signIn
-    // if fails, display an Alert with the title "Erro SignIn" and message "Ocorreu um erro ao tentar logar no app"
-
+  async function handleSignIn() {
+    try {
+      return await signIn();
+    } catch (error) {
+      Alert.alert('Error SignIn', 'Ocorreu um erro ao tentar logar no app')
+    }
+  }
   return (
     <Container
       from={{
@@ -61,23 +64,35 @@ export function SignIn() {
             o mundo da Twitch
           </Description>
 
-          {/* <SignInButton onPress={}>
+          <SignInButton onPress={handleSignIn}>
             <SignInButtonIcon>
-              Verify if isLoggingIn is true
-              If it is, show an ActivityIndicator
-              Otherwise, show Fontisto's twitch icon
+
+              {
+                isLoggingIn ?
+                  <ActivityIndicator size={20} color={theme.colors.white} />
+                  :
+                  <Fontisto
+                    name='twitch'
+                    size={20}
+                    color={theme.colors.white}
+                    style={{ marginRight: 1 }}
+                  />
+              }
             </SignInButtonIcon>
 
             <SignInButtonText>
-              Verify if isLoggingIn is true
-              If it is, show "Entrando..."
-              Otherwise, show "Entrar com Twitch"
+
+              {
+                isLoggingIn ?
+                  'Entrando...' :
+                  'Entrar com Twitch'
+              }
             </SignInButtonText>
-          </SignInButton> */}
+          </SignInButton>
         </LoginInfo>
       </Content>
 
-      <Modal 
+      <Modal
         animationType="fade"
         visible={isLoggingIn}
         statusBarTranslucent
